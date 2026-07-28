@@ -154,30 +154,7 @@ Nếu severity/subtype/template chưa được annotation, báo `not_available`;
 | 26 | Cases/calibration/failure | OOF predictions/details | figure/source tables |
 | 27 | Tái lập | README, Colab, run config, tests | toàn bộ repo/artifacts |
 
-## 7. Nguyên tắc khoa học
-
-1. Không random split từng PDF; split theo 298 source.
-2. Không tune threshold/calibration/hyperparameter trên outer test.
-3. Không dùng GT text làm input inference; GT/manifest chỉ dùng đánh giá.
-4. Bootstrap và statistical tests theo source, không coi 1.490 variants là độc lập.
-5. Không dùng accuracy 80% làm bằng chứng binary vì majority baseline đã đạt 80%.
-6. Smoke test không phải kết quả bài báo.
-7. Ghi model revision, package versions, seed, split IDs và command chạy.
-8. Không công bố PDF nếu chưa xác minh quyền dữ liệu.
-
-## 9. Repository và dữ liệu
-
-Repository chỉ chứa mã nguồn và tài liệu kỹ thuật. Raw/tampered PDFs, OCR/GT text, manifests có nội dung thật, outputs, checkpoints và bản thảo nội bộ bị loại bởi `.gitignore`.
-
-- Cấu hình đường dẫn bằng các biến môi trường trong `.env.example`.
-- Xem `DATA_AVAILABILITY.md` trước khi chia sẻ dữ liệu.
-- Xem `THIRD_PARTY_LICENSES.md` trước khi chọn hoặc phân phối checkpoint.
-- Xem `RELEASE_CHECKLIST.md` trước khi push hoặc đổi repository sang public.
-- Trong giai đoạn chưa công bố, nên giữ GitHub repository ở chế độ **Private**.
-
-Chưa gắn giấy phép mã nguồn cho đến khi quyền sở hữu được xác nhận với tác giả/nhóm/cơ sở liên quan. Việc không có `LICENSE` có nghĩa là không mặc nhiên cấp quyền sao chép, sửa đổi hoặc phân phối.
-
-## 10. Kiểm tra nhanh
+## 7. Kiểm tra nhanh
 
 ```powershell
 python -m pytest tests -q
