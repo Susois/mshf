@@ -55,7 +55,7 @@ mshf/
 ## 4. Cài đặt
 
 ```powershell
-git clone <PRIVATE_REPOSITORY_URL> mshf
+git clone https://github.com/Susois/mshf.git mshf
 cd mshf
 python -m pip install -r requirements.txt
 python -m pytest tests -q
