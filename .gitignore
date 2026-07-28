@@ -1,0 +1,54 @@
+# Python caches and environments
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+env/
+
+# Local secrets and machine-specific configuration
+.env
+.env.*
+!.env.example
+config.local.py
+*.key
+*.pem
+
+# Raw or derived research data
+outputs/
+data/
+datasets/
+artifacts/
+checkpoints/
+*.joblib
+*.pkl
+*.npy
+*.npz
+*.parquet
+*.jsonl
+*.csv
+
+# Raw documents and internal manuscripts
+*.pdf
+*.doc
+*.docx
+*.rtf
+~$*
+
+# OCR/ground-truth content and local manifests
+*.txt
+!requirements.txt
+manifest*.json
+manifest*.yaml
+
+# Notebook, IDE and OS files
+.ipynb_checkpoints/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Claude local session metadata
+.claude/
