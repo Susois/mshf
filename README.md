@@ -44,15 +44,7 @@ Yêu cầu **Python 3.10+**.
 
 ### 3. Tải model đã train
 
-Model **không được lưu trong repo** (quá lớn cho Git). Tải về và đặt vào đúng thư mục:
-
-```
-outputs/
-└── training/
-    └── mshf_label.joblib   ← đặt file này vào đây
-```
-
-> Liên hệ tác giả hoặc chạy lại lệnh train (xem mục [Tái train](#tái-train)) nếu chưa có model.
+Xem mục **[Model đã train](#model-đã-train)** bên dưới để tải `mshf_label.joblib` và đặt vào `outputs/training/`.
 
 ---
 
@@ -171,30 +163,25 @@ for page in report["pages"]:
 
 ---
 
-## Tái train
+## Model đã train
 
-Nếu muốn train lại từ đầu với dữ liệu của mình:
+Tải model tại: **[Releases → mshf_label.joblib](https://github.com/Susois/mshf/releases/latest)**
 
 ```powershell
-# 1. Kiểm tra dữ liệu
-python -m mshf.pipeline.dataset_audit --strict --folds 5
-
-# 2. Xây feature dataset
-python -m mshf.pipeline.build_dataset --output outputs\enhanced_dataset.csv
-
-# 3. Train
-python -m mshf.cli.train `
-  --dataset outputs\enhanced_dataset.csv `
-  --splits  outputs\audit\source_splits.csv `
-  --out     outputs\training `
-  --task    both
+mkdir outputs\training
+Invoke-WebRequest -Uri "https://github.com/Susois/mshf/releases/latest/download/mshf_label.joblib" `
+  -OutFile "outputs\training\mshf_label.joblib"
 ```
 
-Xem `HUONG_DAN_SU_DUNG.md` để biết chi tiết về cấu trúc dữ liệu đầu vào.
+Đọc model trong Python:
 
----
-
-## Cấu trúc repo
+```python
+import joblib
+artifact = joblib.load("outputs/training/mshf_label.joblib")
+# artifact["model"]    → XGBoost model
+# artifact["labels"]   → ["delete", "insert", "layout", "modify", "original"]
+# artifact["features"] → danh sách 40 feature columns
+```
 
 ```
 mshf/
