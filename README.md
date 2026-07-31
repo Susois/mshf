@@ -70,13 +70,23 @@ Lần đầu chạy, PhoBERT (~400 MB) và LayoutLMv3 sẽ được tải tự �
 
 ### Ví dụ cụ thể
 
+Đặt PDF vào thư mục `sample_docs/` theo cấu trúc (xem `sample_docs/README.md`):
+
+```
+sample_docs/
+├── 1.original/ten_tai_lieu.pdf
+└── 2.insert/ten_tai_lieu.pdf
+```
+
+Sau đó chạy:
+
 ```powershell
-cd C:\Su\Dean3\mshf
+cd C:\path\to\mshf
 
 python -m mshf.detect `
-  --original  "C:\Su\DeAn\Tuan6\detector_and_explainer\1.pdfs\1.original\HoangVanNam_11236160.pdf" `
-  --candidate "C:\Su\DeAn\Tuan6\detector_and_explainer\1.pdfs\2.insert\HoangVanNam_11236160.pdf" `
-  --out-dir   "outputs\detect\HoangVanNam_insert" `
+  --original  "sample_docs\1.original\ten_tai_lieu.pdf" `
+  --candidate "sample_docs\2.insert\ten_tai_lieu.pdf" `
+  --out-dir   "outputs\detect\ten_tai_lieu_insert" `
   --mode full
 ```
 
@@ -87,7 +97,7 @@ python -m mshf.detect `
 Sau khi chạy xong, thư mục `--out-dir` chứa:
 
 ```
-outputs/detect/HoangVanNam_insert/
+outputs/detect/ten_tai_lieu_insert/
 ├── tampered_report.html      ← mở bằng trình duyệt để xem kết quả trực quan
 ├── report.json               ← kết quả đầy đủ dạng JSON
 ├── page_000_highlighted.png  ← trang 1 với các dòng bị can thiệp được tô màu
@@ -97,7 +107,7 @@ outputs/detect/HoangVanNam_insert/
 Mở báo cáo:
 
 ```powershell
-start outputs\detect\HoangVanNam_insert\tampered_report.html
+start outputs\detect\ten_tai_lieu_insert\tampered_report.html
 ```
 
 **Màu sắc highlight:**
@@ -146,7 +156,7 @@ python -m mshf.detect `
 ```python
 import json
 
-with open("outputs/detect/HoangVanNam_insert/report.json", encoding="utf-8") as f:
+with open("outputs/detect/ten_tai_lieu_insert/report.json", encoding="utf-8") as f:
     report = json.load(f)
 
 print(report["verdict"])                        # "TAMPERED" hoặc "AUTHENTIC"
