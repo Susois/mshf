@@ -1,0 +1,2 @@
+model,accuracy,std,accuracy_pct,features,classifier,note
+Proposed (Hybrid Fusion),0.6913,0.0257,69.13%,CER+WER + PhoBERT (5 feature) + LayoutLMv3 cosine,XGBoost,Kết hợp 3 nhánh: OCR + Semantic + Layout

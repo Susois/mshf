@@ -1,0 +1,2 @@
+model,accuracy,std,accuracy_pct,features,classifier,note
+PhoBERT semantic similarity,0.2242,0.0128,22.42%,mean/min/std similarity + ref↔hyp mean (PhoBERT cosine),Logistic Regression,"Embedding ngữ nghĩa tiếng Việt, dùng kết quả đã tính tuần 4"

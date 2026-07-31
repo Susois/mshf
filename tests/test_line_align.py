@@ -1,5 +1,5 @@
-from mshf.line_align import line_cer, match_lines
-from mshf.io_utils import as_line_dicts
+from mshf.core.line_align import line_cer, match_lines
+from mshf.core.io_utils import as_line_dicts
 
 
 def test_line_cer_identical_and_changed():

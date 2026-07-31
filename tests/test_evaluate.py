@@ -1,5 +1,5 @@
 import numpy as np
-from mshf.evaluate import cluster_bootstrap_ci, paired_tests
+from mshf.core.evaluate import cluster_bootstrap_ci, paired_tests
 
 
 def test_cluster_bootstrap_returns_ordered_interval():

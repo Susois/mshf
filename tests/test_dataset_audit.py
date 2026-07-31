@@ -1,7 +1,7 @@
 from pathlib import Path
 import pandas as pd
 
-from mshf.dataset_audit import build_inventory, make_splits
+from mshf.pipeline.dataset_audit import build_inventory, make_splits
 
 
 def test_real_inventory_has_expected_structure():

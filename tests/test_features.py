@@ -1,5 +1,5 @@
-from mshf.line_features import line_features_from_texts
-from mshf.semantic_risk import semantic_risk
+from mshf.core.line_features import line_features_from_texts
+from mshf.core.semantic_risk import semantic_risk
 
 
 def test_semantic_risk_conjunction_and_numbers():

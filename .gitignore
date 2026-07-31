@@ -1,14 +1,22 @@
-# Python caches and environments
+# -------------------------------------------------------
+# Python
+# -------------------------------------------------------
 __pycache__/
 *.py[cod]
+*.pyo
 .pytest_cache/
 .coverage
 htmlcov/
 .venv/
 venv/
 env/
+*.egg-info/
+dist/
+build/
 
-# Local secrets and machine-specific configuration
+# -------------------------------------------------------
+# Secrets / config local
+# -------------------------------------------------------
 .env
 .env.*
 !.env.example
@@ -16,39 +24,106 @@ config.local.py
 *.key
 *.pem
 
-# Raw or derived research data
-outputs/
-data/
+# -------------------------------------------------------
+# Dữ liệu thô — KHÔNG commit (quá lớn)
+# Đặt local rồi set biến môi trường nếu cần train lại
+# -------------------------------------------------------
+data/vedtd/
+database/
 datasets/
-artifacts/
-checkpoints/
+raw_data/
+ocr_output/
+ground_truth/
+layout_ocr/
+
+# -------------------------------------------------------
+# Outputs sinh ra khi chạy — KHÔNG commit
+# Ngoại lệ: model baseline Tuần 6 (nhỏ, dùng để so sánh)
+# -------------------------------------------------------
+outputs/
+!outputs/baseline/
+!outputs/baseline/hybrid_model.pkl
+!outputs/baseline/label_encoder.pkl
+
+# -------------------------------------------------------
+# Model weights lớn
+# -------------------------------------------------------
+*.bin
+*.safetensors
 *.joblib
 *.pkl
+!outputs/baseline/*.pkl
+
+# -------------------------------------------------------
+# Data files — KHÔNG commit nói chung
+# Ngoại lệ: các file nhỏ đã có trong repo
+# -------------------------------------------------------
 *.npy
 *.npz
 *.parquet
 *.jsonl
-*.csv
+*.h5
+*.hdf5
 
-# Raw documents and internal manuscripts
-*.pdf
+# CSV — ignore mặc định, các file cụ thể được whitelist bên dưới
+*.csv
+!data/hybrid_fusion_dataset.csv
+!results/**/*.csv
+
+# -------------------------------------------------------
+# Tài liệu nội bộ / trình bày
+# -------------------------------------------------------
 *.doc
 *.docx
 *.rtf
+*.pptx
 ~$*
 
-# OCR/ground-truth content and local manifests
+# PDF — ignore (bao gồm dữ liệu VEDTD)
+*.pdf
+
+# Text OCR / ground truth
 *.txt
 !requirements.txt
-manifest*.json
-manifest*.yaml
+!.env.example
 
-# Notebook, IDE and OS files
+# -------------------------------------------------------
+# HuggingFace / model cache
+# -------------------------------------------------------
+.cache/
+*.lock
+
+# -------------------------------------------------------
+# IDE / OS
+# -------------------------------------------------------
 .ipynb_checkpoints/
 .vscode/
 .idea/
 .DS_Store
 Thumbs.db
+desktop.ini
 
-# Claude local session metadata
+# -------------------------------------------------------
+# Claude / Kiro session metadata
+# -------------------------------------------------------
 .claude/
+.agents/
+earch codebase
+
+# -------------------------------------------------------
+# Các thư mục output detect cụ thể
+# -------------------------------------------------------
+outputs/detect/
+outputs/training/
+outputs/training_b2/
+outputs/audit/
+outputs/robustness/
+outputs/controls/
+outputs/analysis/
+outputs/unseen/
+outputs/cross_template/
+outputs/semantic/
+outputs/report/
+outputs/localization/
+outputs/manifest/
+outputs/single_detection/

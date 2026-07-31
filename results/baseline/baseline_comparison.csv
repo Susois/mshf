@@ -1,0 +1,7 @@
+﻿model,accuracy,std,accuracy_pct,features,classifier,note
+Proposed (Hybrid Fusion),0.6913,0.0257,69.13%,CER+WER + PhoBERT (5 feature) + LayoutLMv3 cosine,XGBoost,Kết hợp 3 nhánh: OCR + Semantic + Layout
+TF-IDF cosine similarity,0.6456,0.0295,64.56%,Char n-gram (2-4) TF-IDF cosine vs 1.original,Logistic Regression,Bag-of-words dựa trên n-gram ký tự
+Levenshtein (CER+WER),0.6336,0.0197,63.36%,"CER, WER vs 1.original",Logistic Regression,Edit distance ký tự và từ
+SBERT (multilingual),0.3906,0.0132,39.06%,SBERT (paraphrase-multilingual-MiniLM-L12-v2) cosine vs 1.original,Logistic Regression,Sentence embedding đa ngôn ngữ
+LayoutLMv3 embedding similarity,0.3879,0.0225,38.79%,LayoutLMv3 cosine embedding vs 1.original,Logistic Regression,"Layout embedding kết hợp ảnh + text + bbox, dùng kết quả tuần 5"
+PhoBERT semantic similarity,0.2242,0.0128,22.42%,mean/min/std similarity + ref↔hyp mean (PhoBERT cosine),Logistic Regression,"Embedding ngữ nghĩa tiếng Việt, dùng kết quả đã tính tuần 4"

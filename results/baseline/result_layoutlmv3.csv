@@ -1,0 +1,2 @@
+model,accuracy,std,accuracy_pct,features,classifier,note
+LayoutLMv3 embedding similarity,0.3879,0.0225,38.79%,LayoutLMv3 cosine embedding vs 1.original,Logistic Regression,"Layout embedding kết hợp ảnh + text + bbox, dùng kết quả tuần 5"

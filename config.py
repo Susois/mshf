@@ -7,13 +7,17 @@ from __future__ import annotations
 import os
 from pathlib import Path
 
-PROJECT_ROOT = Path(os.environ.get("MSHF_PROJECT_ROOT", Path(__file__).resolve().parent.parent)).expanduser().resolve()
-HYBRID_DATASET_CSV = Path(os.environ.get("MSHF_HYBRID_DATASET", PROJECT_ROOT / "Tuan6" / "src" / "hybrid_fusion_dataset.csv"))
-PDF_ROOT = Path(os.environ.get("MSHF_PDF_ROOT", PROJECT_ROOT / "Tuan1_2" / "VEDTD" / "1.pdfs"))
-OCR_TEXT_ROOT = Path(os.environ.get("MSHF_OCR_ROOT", PROJECT_ROOT / "Tuan1_2" / "VEDTD" / "3.ocr_output"))
-GT_TEXT_ROOT = Path(os.environ.get("MSHF_GT_ROOT", PROJECT_ROOT / "Tuan1_2" / "VEDTD" / "2.ground_truth"))
-LAYOUT_JSON_ROOT = Path(os.environ.get("MSHF_LAYOUT_ROOT", PROJECT_ROOT / "Tuan5" / "4.layout_ocr"))
-OUTPUT_DIR = Path(os.environ.get("MSHF_OUTPUT_DIR", Path(__file__).resolve().parent / "outputs"))
+_REPO_ROOT = Path(__file__).resolve().parent
+
+# HYBRID_DATASET_CSV nằm trong repo tại data/
+# Các đường dẫn dữ liệu thô (PDF, OCR, layout) không nằm trong repo —
+# set biến môi trường tương ứng nếu cần train lại từ đầu.
+HYBRID_DATASET_CSV = Path(os.environ.get("MSHF_HYBRID_DATASET", _REPO_ROOT / "data" / "hybrid_fusion_dataset.csv"))
+PDF_ROOT           = Path(os.environ.get("MSHF_PDF_ROOT",        _REPO_ROOT / "data" / "vedtd" / "1.pdfs"))
+OCR_TEXT_ROOT      = Path(os.environ.get("MSHF_OCR_ROOT",        _REPO_ROOT / "data" / "vedtd" / "3.ocr_output"))
+GT_TEXT_ROOT       = Path(os.environ.get("MSHF_GT_ROOT",         _REPO_ROOT / "data" / "vedtd" / "2.ground_truth"))
+LAYOUT_JSON_ROOT   = Path(os.environ.get("MSHF_LAYOUT_ROOT",     _REPO_ROOT / "data" / "vedtd" / "4.layout_ocr"))
+OUTPUT_DIR         = Path(os.environ.get("MSHF_OUTPUT_DIR",      _REPO_ROOT / "outputs"))
 
 ORIGINAL_CAT = "1.original"
 CATEGORIES = ["1.original", "2.insert", "3.delete", "4.modify", "5.layout"]

@@ -1,0 +1,2 @@
+model,accuracy,std,accuracy_pct,features,classifier,note
+TF-IDF cosine similarity,0.6456,0.0295,64.56%,Char n-gram (2-4) TF-IDF cosine vs 1.original,Logistic Regression,Bag-of-words dựa trên n-gram ký tự

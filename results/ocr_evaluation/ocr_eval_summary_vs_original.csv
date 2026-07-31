@@ -1,0 +1,6 @@
+﻿category,num_docs,macro_avg_cer_percent,macro_avg_wer_percent
+1.original,298,14.2305,55.6483
+2.insert,298,18.5330,60.8099
+3.delete,298,15.5660,56.3838
+4.modify,298,15.0747,56.9294
+5.layout,298,14.1010,55.1633

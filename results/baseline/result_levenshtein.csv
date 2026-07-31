@@ -1,0 +1,2 @@
+model,accuracy,std,accuracy_pct,features,classifier,note
+Levenshtein (CER+WER),0.6336,0.0197,63.36%,"CER, WER vs 1.original",Logistic Regression,Edit distance ký tự và từ

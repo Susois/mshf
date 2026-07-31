@@ -42,7 +42,7 @@ def _write_splits(df: pd.DataFrame, path: Path, n_folds: int = 3) -> Path:
 class TestJoinB2:
     def test_join_saves_output(self, tmp_path, monkeypatch):
         monkeypatch.setattr(config, "OUTPUT_DIR", tmp_path)
-        from mshf import join_b2
+        from mshf.pipeline import join_b2
 
         (tmp_path / "semantic").mkdir(parents=True)
         base = pd.DataFrame({
@@ -72,7 +72,7 @@ class TestJoinB2:
 
 class TestRobustnessEval:
     def test_cross_validate_returns_metrics_and_predictions(self, tmp_path):
-        from mshf.robustness_eval import cross_validate_robustness
+        from mshf.research.robustness_eval import cross_validate_robustness
 
         df = _synthetic_dataset()
         perturbed = df.copy()
@@ -87,7 +87,7 @@ class TestRobustnessEval:
         assert {"y_true", "y_pred", "proba_tampered"} <= set(pred_df.columns)
 
     def test_perturb_features_preserves_shape_and_labels(self):
-        from mshf.extract_control_features import perturb_features
+        from mshf.research.extract_control_features import perturb_features
 
         df = _synthetic_dataset()
         out = perturb_features(df, "noise", level=3, seed=42)
@@ -98,7 +98,7 @@ class TestRobustnessEval:
 
 class TestUnseenEval:
     def test_run_holdout_no_source_leakage(self):
-        from mshf.unseen_eval import run_holdout
+        from mshf.research.unseen_eval import run_holdout
 
         df = _synthetic_dataset(16)
         # generator A cho nua dau, B cho nua sau
@@ -116,13 +116,13 @@ class TestUnseenEval:
 
 class TestCreateReport:
     def test_find_proba_column(self):
-        from mshf.create_report import find_proba_column
+        from mshf.research.create_report import find_proba_column
 
         df = pd.DataFrame({"proba_0": [0.1], "proba_1": [0.9]})
         assert find_proba_column(df) == "proba_1"
 
     def test_case_studies_and_summary(self, tmp_path):
-        from mshf.create_report import create_case_studies
+        from mshf.research.create_report import create_case_studies
 
         pred = pd.DataFrame({
             "sample_id": [f"s{i}" for i in range(8)],
