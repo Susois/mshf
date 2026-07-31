@@ -15,10 +15,11 @@ from mshf.evaluate import evaluate_predictions, format_report, paired_tests
 from mshf.geometric_features import GEOMETRIC_FEATURE_COLS
 from mshf.line_features import LINE_FEATURE_COLS
 from mshf.models import SingleModel, StackingModel, TwoStageModel
+from mshf.semantic_features import B2_FEATURE_COLS
 
 
 def branches(cols):
-    return {"A": [cols.index(c) for c in config.DOC_FEATURE_COLS if c in cols], "B1": [cols.index(c) for c in LINE_FEATURE_COLS if c in cols], "C": [cols.index(c) for c in GEOMETRIC_FEATURE_COLS if c in cols]}
+    return {"A": [cols.index(c) for c in config.DOC_FEATURE_COLS if c in cols], "B1": [cols.index(c) for c in LINE_FEATURE_COLS if c in cols], "C": [cols.index(c) for c in GEOMETRIC_FEATURE_COLS if c in cols], "B2": [cols.index(c) for c in B2_FEATURE_COLS if c in cols]}
 
 
 def choose_threshold(y, probability):
@@ -77,8 +78,10 @@ def cross_validate(df, target, cols, kind, split_file=None, folds=5):
 def main():
     ap=argparse.ArgumentParser(); ap.add_argument("--dataset",type=Path,default=config.OUTPUT_DIR/"enhanced_dataset.csv"); ap.add_argument("--out",type=Path,default=config.OUTPUT_DIR/"training"); ap.add_argument("--splits",type=Path,default=config.OUTPUT_DIR/"audit"/"source_splits.csv"); ap.add_argument("--folds",type=int,default=5); ap.add_argument("--task",choices=["binary","multi","both"],default="both"); ap.add_argument("--models",nargs="+",choices=["single","stacking","two_stage"],default=["single","stacking","two_stage"]); args=ap.parse_args()
     df=pd.read_csv(args.dataset); args.out.mkdir(parents=True,exist_ok=True)
-    A=config.DOC_FEATURE_COLS; B=LINE_FEATURE_COLS; C=GEOMETRIC_FEATURE_COLS
-    ablations={"A":A,"A+B1":A+B,"A+C":A+C,"B1+C":B+C,"A+B1+C":A+B+C}; targets=["is_tampered","label"] if args.task=="both" else (["is_tampered"] if args.task=="binary" else ["label"])
+    A=config.DOC_FEATURE_COLS; B=LINE_FEATURE_COLS; C=GEOMETRIC_FEATURE_COLS; B2=[c for c in B2_FEATURE_COLS if c in df.columns]
+    ablations={"A":A,"A+B1":A+B,"A+C":A+C,"B1+C":B+C,"A+B1+C":A+B+C}
+    if B2: ablations.update({"A+B1+B2":A+B+B2,"A+B1+B2+C":A+B+B2+C})
+    targets=["is_tampered","label"] if args.task=="both" else (["is_tampered"] if args.task=="binary" else ["label"])
     results=[]; predictions={}; reports=[]
     for target in targets:
         for ablation, cols in ablations.items():
@@ -93,6 +96,11 @@ def main():
             a=predictions[base]; b=predictions[full]; tests.append({"target":target,"comparison":"A_vs_full",**paired_tests(a.y_true,a.y_pred,b.y_pred,a.source_document_id)})
     (args.out/"training_summary.json").write_text(json.dumps(results,ensure_ascii=False,indent=2),encoding="utf-8"); (args.out/"statistical_tests.json").write_text(json.dumps(tests,ensure_ascii=False,indent=2),encoding="utf-8"); (args.out/"report.txt").write_text("\n\n".join(reports),encoding="utf-8")
     pd.DataFrame([{k:r.get(k) for k in ["name","target","ablation","model_kind","accuracy","balanced_accuracy","macro_f1","weighted_f1","mcc","auroc","auprc","auroc_ovr_macro","brier","ece"]} for r in results]).to_csv(args.out/"comparison.csv",index=False,encoding="utf-8-sig")
+    if B2:
+        b2_rows=[{k:r.get(k) for k in ["name","target","ablation","model_kind","accuracy","balanced_accuracy","macro_f1","weighted_f1","mcc","auroc","auprc","brier","ece"]} for r in results if r["ablation"] in {"A","A+B1","A+B1+C","A+B1+B2","A+B1+B2+C"}]
+        pd.DataFrame(b2_rows).to_csv(args.out/"b2_ablation_metrics.csv",index=False,encoding="utf-8-sig")
+        b2_cfg={"seed":42,"dataset":str(args.dataset),"splits":str(args.splits),"b2_features":B2,"ablations":["A","A+B1","A+B1+C","A+B1+B2","A+B1+B2+C"]}
+        (args.out/"run_config_b2.json").write_text(json.dumps(b2_cfg,ensure_ascii=False,indent=2),encoding="utf-8")
     run={"seed":42,"python":platform.python_version(),"sklearn":sklearn.__version__,"dataset":str(args.dataset),"splits":str(args.splits)}; (args.out/"run_config.json").write_text(json.dumps(run,indent=2),encoding="utf-8")
     full=A+B+C
     for target in targets:
