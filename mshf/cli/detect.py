@@ -530,6 +530,14 @@ def _localize_lines(
         if pg >= n_pages:
             continue
 
+        # Lọc các dòng chỉ là số trang / header ngắn (false positive phổ biến)
+        cand_text = cand_line["text"].strip() if cand_line else ""
+        orig_text = orig_line["text"].strip() if orig_line else ""
+        ref_text  = cand_text or orig_text
+        # Bỏ qua nếu là dòng số thuần túy (số trang) hoặc quá ngắn (< 3 ký tự)
+        if re.match(r'^\d{1,4}$', ref_text) or len(ref_text) < 3:
+            continue
+
         entry = {
             "line_idx": idx,
             "type": event_type,
@@ -762,6 +770,30 @@ def detect(
         prediction = _predict(all_features, model_path)
         print(f"  Label: {prediction['label']} | Confidence: {prediction['confidence']:.2%}")
         print(f"  Xác suất: " + " | ".join(f"{k}={v:.1%}" for k, v in prediction["all_probs"].items()))
+
+        # --- Override khi model underconfident nhưng line-level evidence rõ ràng ---
+        # Trường hợp: model nói "original" nhưng B1 phát hiện có dòng bị sửa thực sự
+        mod_count = b1_feats.get("ln_modified_count", 0)
+        ins_count = b1_feats.get("ln_insert_count", 0)
+        del_count = b1_feats.get("ln_delete_count", 0)
+        critical  = b1_feats.get("ln_critical_count", 0)
+        mod_cer   = b1_feats.get("ln_mod_cer_mean", 0)
+
+        if prediction["label"] == "original":
+            # Có insert/delete thực sự (CER=1.0) → chắc chắn bị tấn công
+            if ins_count >= 1:
+                print(f"  [OVERRIDE] {ins_count} dòng inserted → label: insert")
+                prediction["label"] = "insert"
+                prediction["is_tampered"] = True
+            elif del_count >= 1:
+                print(f"  [OVERRIDE] {del_count} dòng deleted → label: delete")
+                prediction["label"] = "delete"
+                prediction["is_tampered"] = True
+            # Có modify với semantic change thực sự (không phải nhiễu OCR)
+            elif mod_count >= 1 and critical >= 1 and mod_cer >= 0.3:
+                print(f"  [OVERRIDE] {mod_count} dòng modified (critical={critical}, cer={mod_cer:.2f}) → label: modify")
+                prediction["label"] = "modify"
+                prediction["is_tampered"] = True
     else:
         print("  [WARN] Không tìm thấy model — chỉ chạy localization")
 
