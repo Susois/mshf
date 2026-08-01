@@ -1,4 +1,6 @@
-# CPU-only core (chạy được ngay trên máy thường)
+# -------------------------------------------------------
+# Core — bắt buộc cho mshf.detect (CPU, không cần GPU)
+# -------------------------------------------------------
 numpy>=1.24
 pandas>=2.0
 scikit-learn>=1.3
@@ -6,8 +8,20 @@ xgboost>=2.0
 rapidfuzz>=3.0
 scipy>=1.10
 joblib>=1.3
+PyMuPDF>=1.23          # fitz — đọc PDF, render ảnh
+Pillow>=10.0           # xử lý ảnh highlight
 
-# Tuỳ chọn (chỉ cần khi chạy nhánh embedding mức dòng trên Colab/GPU)
-# torch
-# transformers
-# sentencepiece
+# -------------------------------------------------------
+# Tuỳ chọn — nhánh A (PhoBERT + LayoutLMv3)
+# Cần cho --mode full. Tự tải về lần đầu chạy.
+# -------------------------------------------------------
+torch>=2.0
+transformers>=4.35
+sentencepiece>=0.1.99
+
+# -------------------------------------------------------
+# Tuỳ chọn — OCR cho PDF scan
+# Chỉ cần khi dùng --ocr paddleocr
+# -------------------------------------------------------
+# paddlepaddle
+# paddleocr
